@@ -143,6 +143,14 @@ class TokenAuth(requests.auth.AuthBase):
         r.headers['Authorization'] = 'Token {}'.format(self.key)
         return r
 
+class ApiKeyAuth(requests.auth.AuthBase):
+    def __init__(self, api_key, value):
+        self.api_key = api_key
+        self.value = value
+
+    def __call__(self, r):
+        r.headers[self.api_key] = "{}".format(self.value)
+        return r
 
 class _TAXIIEndpoint(object):
     """Contains some data and functionality common to all TAXII endpoint
