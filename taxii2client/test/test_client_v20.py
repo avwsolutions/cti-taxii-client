@@ -12,6 +12,9 @@ from taxii2client import (
 from taxii2client.common import (
     TokenAuth, _filter_kwargs_to_query_params, _HTTPConnection, _TAXIIEndpoint
 )
+from taxii2client.common import (
+    ApiKeyAuth, _filter_kwargs_to_query_params, _HTTPConnection, _TAXIIEndpoint
+)
 from taxii2client.exceptions import (
     AccessError, InvalidArgumentsError, InvalidJSONError,
     TAXIIServiceException, ValidationError
@@ -981,6 +984,11 @@ def test_taxii_endpoint_raises_exception():
 
     with pytest.raises(InvalidArgumentsError) as excinfo:
         _TAXIIEndpoint(fake_url, conn, "other", "test", auth=TokenAuth('abcd'))
+
+    assert error_str in str(excinfo.value)
+
+    with pytest.raises(InvalidArgumentsError) as excinfo:
+        _TAXIIEndpoint(fake_url, conn, auth=ApiKeyAuth('foo','bar123'))
 
     assert error_str in str(excinfo.value)
 
